@@ -1,12 +1,12 @@
 {
-    "strategy": "EnsembleStrategy",
-    "db_url": "$LIVE_DATABASE_URL",
+    "strategy": "NostalgiaForInfinityNext",
+    "db_url": "sqlite:////freqtrade/user_data/db/nfi.live.sqlite",
     "dry_run": false,
     "timeframe": "5m",
-    "max_open_trades": 20,
+    "max_open_trades": 6,
     "stake_currency": "USDT",
     "stake_amount": "unlimited",
-    "tradable_balance_ratio": 0.99,
+    "tradable_balance_ratio": 0.5,
     "fiat_display_currency": "USD",
     "cancel_open_orders_on_exit": false,
     "unfilledtimeout": {
@@ -14,7 +14,7 @@
         "sell": 30
     },
     "bid_strategy": {
-        "price_side": "bid",
+        "price_side": "ask",
         "ask_last_balance": 0.0,
         "use_order_book": false,
         "order_book_top": 1,
@@ -24,60 +24,56 @@
         }
     },
     "ask_strategy": {
-        "price_side": "ask",
+        "price_side": "bid",
         "use_order_book": false,
         "order_book_min": 1,
         "order_book_max": 1
     },
     "exchange": {
-        "name": "$EXCHANGE_NAME",
+        "name": "binance",
         "key": "$EXCHANGE_KEY",
         "secret": "$EXCHANGE_SECRET",
         "ccxt_config": {"enableRateLimit": true},
         "ccxt_async_config": {
             "enableRateLimit": true,
-            "rateLimit": 500
+            "rateLimit": 150
         },
         "pair_whitelist": [
         ],
         "pair_blacklist": [
-            ".*PERP",
-            ".*PERP/.*",
-            "BIDR/.*",
-            "BTC/.*", 
-            "BUSD/.*",
-            "BVND/.*",
-            "ETH/.*",
-            ".*(BNB)/.*",
-            ".*(AUD|BRZ|CAD|CHF|DAI|EUR|GBP|HKD|IDRT|JPY|NGN|PAX|PAXG|RUB|SGD|SUSD|TRY|TUSD|UAH|USD|USDC|VAI|ZAR)/.*",
-            ".*(_PREMIUM|BEAR|BULL|DOWN|HALF|HEDGE|UP|[1235][SL]).*/.*",
-            ".*(ACM|AFA|ALA|ALL|APL|ASR|ATM|BAR|CAI|CITY|FOR|GAL|GOZ|IBFK|JUV|LEG|LOCK-1|NAVI|NMR|NOV|OG|PFL|PSG|ROUSH|STV|TH|TRA|UCH|UFC|YBO)/.*",
-            ".*(CHZ|CTXC|HBAR|NMR|SHIB|SLP|XVS|ZEN)/.*"
+            "(BNB)/.*",
+            "(BTC|ETH)/.*",
+            ".*(_PREMIUM|BEAR|BULL|DOWN|HALF|HEDGE|UP|[1235][SL])/.*",
+            "(AUD|BRZ|CAD|CHF|EUR|GBP|HKD|IDRT|JPY|NGN|RUB|SGD|TRY|UAH|USD|ZAR)/.*",
+            "(BUSD|CUSDT|DAI|PAX|PAXG|SUSD|TUSD|USDC|USDT|VAI)/.*",
+            "(ACM|AFA|ALA|ALL|APL|ASR|ATM|BAR|CAI|CITY|FOR|GAL|GOZ|IBFK|JUV|LEG|LOCK-1|NAVI|NMR|NOV|OG|PFL|PSG|ROUSH|STV|TH|TRA|UCH|UFC|YBO)/.*",
+            "(CHZ|CTXC|HBAR|NMR|SHIB|SLP|XVS|ONG)/.*"
         ]
     },
     "pairlists": [
         {
             "method": "VolumePairList",
-            "number_assets": 50,
+            "number_assets": 80,
             "sort_key": "quoteVolume",
             "refresh_period": 1800
         },
-        {"method": "AgeFilter", "min_days_listed": 10},
+        {"method": "AgeFilter", "min_days_listed": 3},
         {"method": "SpreadFilter", "max_spread_ratio": 0.005},
-        {"method": "PriceFilter", "low_price_ratio": 0.10, "min_price": 0.05},
+        {"method": "PriceFilter", "min_price": 0.0001},
         {
             "method": "RangeStabilityFilter",
-            "lookback_days": 10,
+            "lookback_days": 3,
             "min_rate_of_change": 0.1,
             "refresh_period": 1440
         },
         {
-            "method": "VolumePairList",
-            "number_assets": 50,
-            "sort_key": "quoteVolume",
-            "refresh_period": 1440
+            "method": "VolatilityFilter",
+            "loopback_days": 4,
+            "min_volatility": 0.02,
+            "max_volatility": 0.75,
+            "refresh_period": 86400
         },
-        {"method": "PerformanceFilter"}	
+        {"method": "ShuffleFilter"}
 	],
     "edge": {
         "enabled": false,
@@ -99,9 +95,9 @@
         "chat_id": "$TELEGRAM_CHAT_ID_LIVE"
     },
     "api_server": {
-        "enabled": true,
+        "enabled": false,
         "listen_ip_address": "0.0.0.0",
-        "listen_port": $PORT,
+        "listen_port": 8080,
         "verbosity": "error",
         "enable_openapi": false,
         "jwt_secret_key": "$SECURE_KEY",

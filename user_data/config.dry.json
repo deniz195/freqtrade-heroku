@@ -1,13 +1,13 @@
 {
-    "strategy": "EnsembleStrategy",
-    "db_url": "$DRY_DATABASE_URL",
+    "strategy": "NostalgiaForInfinityNext",
+    "db_url": "sqlite:////freqtrade/user_data/db/nfi.dry.sqlite",
     "dry_run": true,
     "dry_run_wallet": 10000,
-    "max_open_trades": 20,
+    "max_open_trades": 5,
     "timeframe": "5m",
     "stake_currency": "USDT",
     "stake_amount": "unlimited",
-    "tradable_balance_ratio": 0.99,
+    "tradable_balance_ratio": 0.5,
     "fiat_display_currency": "USD",
     "cancel_open_orders_on_exit": false,
     "unfilledtimeout": {
@@ -31,7 +31,7 @@
         "order_book_max": 1
     },
     "exchange": {
-        "name": "$EXCHANGE_NAME",
+        "name": "binance",
         "key": "$EXCHANGE_KEY",
         "secret": "$EXCHANGE_SECRET",
         "ccxt_config": {"enableRateLimit": true},
@@ -101,7 +101,7 @@
     "api_server": {
         "enabled": false,
         "listen_ip_address": "0.0.0.0",
-        "listen_port": $PORT,
+        "listen_port": 8080,
         "verbosity": "error",
         "enable_openapi": false,
         "jwt_secret_key": "$SECURE_KEY",

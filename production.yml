@@ -1,0 +1,12 @@
+---
+version: '3'
+services:
+  live:
+    image: joaoraf/freqtrade:master
+    env_file: 
+      - .env
+    restart: unless-stopped
+    volumes:
+      - "./db:/freqtrade/user_data/db"
+    command: >
+      freqtrade trade -c live.json
